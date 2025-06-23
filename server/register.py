@@ -23,3 +23,13 @@ async def register_user(user: User):
         "message": "User registered successfully",
         "user_id": str(result.inserted_id)
     }
+
+@router.post("/login")
+async def login_user(user: User):
+    existing_user = await user_collection.find_one({"email": user.email, "password": user.password})
+    if not existing_user:
+        raise HTTPException(status_code=400, detail="User Not found")
+    
+    return {
+        "message": "Login Succesfull"
+    }
