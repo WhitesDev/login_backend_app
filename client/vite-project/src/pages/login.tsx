@@ -8,11 +8,11 @@ const login: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-     const handleRegister = async () => {
+    const handleRegister = async () => {
 
         const data = {
-            email,
-            password,
+            email: email.trim(),
+            password: password.trim()
         };
 
         try {

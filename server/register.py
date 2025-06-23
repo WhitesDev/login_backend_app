@@ -24,12 +24,24 @@ async def register_user(user: User):
         "user_id": str(result.inserted_id)
     }
 
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
 @router.post("/login")
-async def login_user(user: User):
-    existing_user = await user_collection.find_one({"email": user.email, "password": user.password})
-    if not existing_user:
-        raise HTTPException(status_code=400, detail="User Not found")
+async def login_user(user: UserLogin):
+    print(f"Trying login: {user.email} / {user.password}")  # Debug print
     
+    existing_user = await user_collection.find_one({
+        "email": user.email.strip(),
+        "password": user.password.strip()
+    })
+
+    if not existing_user:
+        raise HTTPException(status_code=400, detail="User not found or wrong password")
+
     return {
-        "message": "Login Succesfull"
+        "message": "Login Successful",
+        "username": existing_user["username"]
     }
